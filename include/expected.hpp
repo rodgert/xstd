@@ -478,7 +478,7 @@ public:
 
 private:
     using type = expected<value_type, error_type>;
-    
+
 public:
     expected()
         : base{ expected_detail::value_tag }
@@ -486,7 +486,7 @@ public:
 
     expected(expected const&) = default;
     expected(expected&&) = default;
-    
+
     constexpr expected(value_type const& val)
         : base{ expected_detail::value_tag, val }
     { }
@@ -898,14 +898,14 @@ template <typename T, typename E, typename U>
 constexpr expected<T, E> make_expected_from_error(U&& u) {
     return make_expected_from_error<T>(E{ std::forward<U>(u) });
 }
-} // namespace azmqn::utility
+} // namespace xstd::utility
 
 namespace std {
 template<typename T, typename E>
-struct hash<azmqn::utility::expected<T, E>> {
-    using argument_type = azmqn::utility::expected<T, E>;
+struct hash<xstd::expected<T, E>> {
+    using argument_type = xstd::expected<T, E>;
     using result_type = size_t;
-    
+
     result_type operator()(argument_type const& e) {
         return e ? hash<typename argument_type::value_type>{ } (e.value())
                  : hash<typename argument_type::error_type>{ } (e.error());
@@ -913,10 +913,10 @@ struct hash<azmqn::utility::expected<T, E>> {
 };
 
 template<typename E>
-struct hash<azmqn::utility::expected<void, E>> {
-    using argument_type = azmqn::utility::expected<void, E>;
+struct hash<xstd::expected<void, E>> {
+    using argument_type = xstd::expected<void, E>;
     using result_type = size_t;
-    
+
     result_type operator()(argument_type const& e) {
         return e ? 0
                  : hash<typename argument_type::error_type>{ } (e.error());
